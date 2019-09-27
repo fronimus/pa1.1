@@ -1,0 +1,19 @@
+<html>
+<head>
+    <title>
+        Upload cvs
+    </title>
+</head>
+<body>
+<form method="post" action="{{ url_for('cvs.view') }}" enctype="multipart/form-data">
+    <dl>
+        <p>
+            <input type="file" name="files[]" multiple="true" autocomplete="off" required>
+        </p>
+    </dl>
+    <p>
+        <input type="submit" value="Submit">
+    </p>
+</form>
+</body>
+</html>
