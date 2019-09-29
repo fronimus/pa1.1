@@ -1,6 +1,0 @@
-{% for df in dfs %}
-    {{ df._filename }}
-    {% for index, row in df.iterrows() %}
-        <p>{{ row['date'] }} {{ row['amount'] }} {{ row['category'] }}</p>
-    {% endfor %}
-{% endfor %}
