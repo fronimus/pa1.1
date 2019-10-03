@@ -6,7 +6,8 @@ import logging
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from fin.routes.csv import csv
+from .fin.routes.csv import csv
+from .site import site
 from config import Config
 
 # pylint: disable=invalid-name
@@ -26,8 +27,9 @@ def create_app(config_class=Config):
     db.init_app(app)
     migrate.init_app(app, db)
     app.register_blueprint(csv, url_prefix='/fin')
+    app.register_blueprint(site)
     return app
 
 
 # pylint: disable=ungrouped-imports
-from fin import models
+from .fin import models

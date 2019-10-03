@@ -2,7 +2,7 @@
 """
 Module for PA models
 """
-from fin import db
+from pa import db
 
 
 # pylint: disable=too-few-public-methods
