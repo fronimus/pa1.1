@@ -5,3 +5,4 @@ app.sqlite3
 venv
 raw_data
 *.log
+*.pyc

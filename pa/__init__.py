@@ -1,3 +1,4 @@
+# pylint: disable-all
 """
 Creating Flask app
 """
@@ -6,16 +7,13 @@ import logging
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from config import Config
 from .fin.routes.csv import csv
 from .site import site
-from config import Config
 
-# pylint: disable=invalid-name
 db = SQLAlchemy()
 migrate = Migrate()
 
-
-# pylint: enable=invalid-name
 
 def create_app(config_class=Config):
     """
@@ -31,5 +29,4 @@ def create_app(config_class=Config):
     return app
 
 
-# pylint: disable=ungrouped-imports
 from .fin import models

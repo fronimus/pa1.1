@@ -4,7 +4,7 @@ Module for csv upload endpoint
 import pandas as pd
 from flask import render_template, request, flash, redirect, current_app
 
-from ...routes.csv import csv
+from pa.fin.routes.csv import csv
 
 PROCESSING_ERROR_MESSAGE = 'Error while processing {} file'
 FILES_NOT_FOUND_ERROR_MESSAGE = 'No file part'
