@@ -6,7 +6,7 @@ import string
 
 import pytest
 
-from fin import create_app
+from pa import create_app
 
 
 @pytest.fixture

@@ -3,7 +3,7 @@ Module for csv edit endpoint
 """
 from flask import render_template
 
-from ...routes.csv import csv
+from pa.fin.routes.csv import csv
 
 
 @csv.route('/csv/edit')

@@ -1,4 +1,6 @@
 {% extends "base/base.jinja2" %}
 {% block body %}
-
+    {% for df in dfs %}
+        {{ df.filename }}
+    {% endfor %}
 {% endblock %}
