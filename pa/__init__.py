@@ -4,13 +4,11 @@ Creating Flask app
 """
 import logging
 
-import jinja2
 from flask import Flask
+from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import Config
-from .fin.routes.csv import csv
-from .site import site
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -25,10 +23,21 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
     db.init_app(app)
     migrate.init_app(app, db)
+    toolbar = DebugToolbarExtension()
+    toolbar.init_app(app)
+
+    config = app.config
+    panels = list(config['DEBUG_TB_PANELS'])
+    panels.append('flask_debug_api.BrowseAPIPanel')
+    config['DEBUG_TB_PANELS'] = panels
+    config['DEBUG_API_PREFIX'] = '/fin'
+
+    from .fin.routes.csv import csv
+    from .fin.routes.asset import asset
+    from .site import site
+
+    app.register_blueprint(asset, url_prefix='/fin')
     app.register_blueprint(csv, url_prefix='/fin')
     app.register_blueprint(site)
     app.jinja_env.filters['zip'] = zip
     return app
-
-
-from .fin import models
