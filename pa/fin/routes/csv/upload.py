@@ -1,6 +1,8 @@
 """
 Module for csv upload endpoint
 """
+import json
+
 import pandas as pd
 from flask import render_template, request, flash, redirect, current_app
 
@@ -22,18 +24,18 @@ def upload():
         return redirect(request.url)
     files = request.files.getlist('files[]')
 
-    dfs = []
+    data = []
     replenish_categories = ['Покупка металов',
                             'Покупка валюты',
                             'replenish',
                             'Покупка криптовалюты']
     for file in files:
         try:
-            dataframe = pd.read_csv(file, delimiter=';')
-            dataframe.filename = file.filename
+            dataframe = pd.read_csv(file, delimiter=';', usecols=['date', 'amount', 'category'])
             dataframe['category'] = (dataframe['category'].isin(replenish_categories))
-            dfs.append(dataframe)
+            data.append(json.dumps({file.filename: dataframe.to_json()}))
+
         except KeyError as error:
             current_app.logger.exception(error)
             flash(PROCESSING_ERROR_MESSAGE.format(file.filename))
-    return render_template('csv/edit.jinja2', dfs=dfs)
+    return render_template('csv/edit.jinja2', data=data)

@@ -1,6 +1,62 @@
 {% extends "base/base.jinja2" %}
 {% block body %}
-    {% for df in dfs %}
-        {{ df.filename }}
-    {% endfor %}
+    {% raw %}
+    <script id="df-template" type="text/x-handlebars-template">
+        <div id="{{ df_name }}" class="text-center container-fluid">
+            <h5>{{ df_name }}</h5>
+            <div class="text-center row p-1">
+                <div class="text-center col-3">
+                    Date
+                </div>
+                <div class="text-center col-3">
+                    Amount
+                </div>
+                <div class="text-center col-3">
+                    Is replenish
+                </div>
+                <div class="text-center col-3">
+                    <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        Merge Account To
+                    </button>
+                    <div class="dropdown-menu">
+                        {{#each filesnames}}
+                        {{#if_eq this ../df_name}}
+                        {{else }}
+                        <a class="dropdown-item" href="#"
+                           onclick="mergeAccounts('{{ ../df_name }}','{{ this }}')">
+                            {{ this }}
+                        </a>
+                        {{/if_eq }}
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+            {{#each df_data}}
+            <div id="{{ ../df_name }}:{{ @index }}" class="row p-1">
+                <div class="text-center col-3">
+                    {{ formatDate this.date }}
+                </div>
+
+                <div class="text-center col-3">
+                    {{ this.amount}}
+                </div>
+
+                <div class="text-center col-3">
+                    {{ this.category}}
+                </div>
+                <div class="text-center col-3">
+                    <button type="button" class="btn btn-danger"
+                            onclick="deleteRow('{{ ../df_name }}:{{ @index }}')">
+                        Delete
+                    </button>
+                </div>
+            </div>
+            {{/each }}
+    </script>
+    {% endraw %}
+    <script src="{{ url_for('static', filename='csv_edit.js') }}"></script>
+    <script>
+        saveData({{ data }})
+    </script>
 {% endblock %}
