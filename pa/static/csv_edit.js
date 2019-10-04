@@ -35,7 +35,7 @@ function renderPage() {
         $('body').append(html);
     });
     $('body').append('<div class="container-fluid">' +
-        '<div class="row  text-center">' +
+        '<div class="row  text-center" onclick="sendData()">' +
         '<button type="button" class="btn btn-success text-center col-12 p-2 rounded-0">' +
         'Save Data' +
         '</button>' +
@@ -95,8 +95,10 @@ function mergeAccounts(fromAccountId, toAccountId) {
     renderPage();
 }
 
-function saveData(data) {
+function saveData(data, sendDataUrl, redirectUrl) {
     "use strict";
+    sessionStorage.setItem('saveDataUrl', sendDataUrl);
+    sessionStorage.setItem('redirectUrl', redirectUrl);
     data.forEach(function (element) {
             let df = JSON.parse(element);
             let id = Object.keys(df)[0];
@@ -115,14 +117,13 @@ function saveData(data) {
     renderPage();
 }
 
-function sendData(url) {
+function sendData() {
     $.ajax({
         type: "POST",
-        url: url,
-        data: JSON.stringify(globalAccountData)
-    }).done(function () {
-
-    }).fail(function () {
-
+        url: sessionStorage.getItem('saveDataUrl'),
+        data: {'data': JSON.stringify(globalAccountData)}
+    }).always(function (data, status, error) {
+        $().alert();
+        // window.location.replace(sessionStorage.getItem('redirectUrl'));
     });
 }
