@@ -1,5 +1,5 @@
 """
-Test for csv/upload endpoint
+Tests for csv/upload endpoint
 """
 from io import BytesIO
 
@@ -8,6 +8,8 @@ from flask import current_app, url_for
 from pa.fin.routes.csv.upload import PROCESSING_ERROR_MESSAGE, FILES_NOT_FOUND_ERROR_MESSAGE
 # pylint: disable=unused-import
 from tests.test_fin import client, generate_filename
+
+
 # pylint: enable=unused-import
 
 # pylint: disable=redefined-outer-name

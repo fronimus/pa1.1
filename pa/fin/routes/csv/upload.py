@@ -35,7 +35,7 @@ def upload():
             dataframe['category'] = (dataframe['category'].isin(replenish_categories))
             data.append(json.dumps({file.filename: dataframe.to_json()}))
 
-        except KeyError as error:
+        except (ValueError, KeyError) as error:
             current_app.logger.exception(error)
             flash(PROCESSING_ERROR_MESSAGE.format(file.filename))
     return render_template('csv/edit.jinja2', data=data)

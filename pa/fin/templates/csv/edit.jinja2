@@ -57,6 +57,6 @@
     {% endraw %}
     <script src="{{ url_for('static', filename='csv_edit.js') }}"></script>
     <script>
-        saveData({{ data }})
+        saveData({{ data }}, '{{ url_for('csv.save') }}', '{{ url_for('asset.list') }}')
     </script>
 {% endblock %}
