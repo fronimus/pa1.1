@@ -3,6 +3,7 @@
 Module for PA models
 """
 from sqlalchemy.orm import relationship
+from sqlalchemy.util import memoized_property
 
 from pa import db
 
@@ -21,6 +22,8 @@ class Record(db.Model):
     amount = db.Column(db.Numeric(precision=10, scale=2, asdecimal=True), nullable=False)
     is_replenish = db.Column(db.Boolean, nullable=False, default=True)
 
+    def __repr__(self):
+        return str(self.date) + ' ' + str(self.amount)
 
 class Asset(db.Model):
     """
