@@ -20,21 +20,38 @@ class YieldsHistoryItem:
         self.yields = yields
 
 
-@asset.route('asset/analyse')
+@asset.route('asset/analyse/all')
 def analyse():
     assets_prices = {}
     for asset in db.session.query(Asset):
         query = db.session.query(Record).filter(Record.asset_id == asset.id).order_by(Record.date.asc()).all()
         assets_prices.update({asset.name: []})
+
         if len(query) >= 2:
+            asset_price = {'amount': query[0].amount, 'date': query[0].date.isoformat()}
+            assets_prices[asset.name].append(asset_price)
+
             asset.yields_history = YieldsHistory()
-            asset_price = query[0].amount
             pairs = zip(query[:-1], query[1:])
 
             for record, next_record in pairs:
                 if not (record.is_replenish or next_record.is_replenish):
-                    asset_price += next_record.amount
+                    if asset_price['date'] != next_record.date.isoformat():
+                        asset_price = {'amount': asset_price['amount'] + next_record.amount,
+                                       'date': next_record.date.isoformat()}
+                        assets_prices[asset.name].append(asset_price)
+                    else:
+                        asset_price['amount'] += next_record.amount
+
                     asset.yields_history.append(YieldsHistoryItem(start_date=record.date, end_date=record.date,
-                                                                  yields=next_record.amount / asset_price))
-                    assets_prices[asset.name].append(asset_price)
+                                                                  yields=next_record.amount / asset_price['amount']))
+                else:
+                    if asset_price['date'] != next_record.date.isoformat():
+                        asset_price = {'amount': asset_price['amount'] + next_record.amount,
+                                       'date': next_record.date.isoformat()}
+                        assets_prices[asset.name].append(asset_price)
+                    else:
+                        asset_price['amount'] += next_record.amount
+        elif len(query) == 1:
+            assets_prices[asset.name].append({'amount': query[0].amount, 'date': query[0].date.isoformat()})
     return render_template('asset.jinja2', assets_prices=assets_prices)

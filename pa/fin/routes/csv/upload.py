@@ -10,7 +10,11 @@ from pa.fin.routes.csv import csv
 
 PROCESSING_ERROR_MESSAGE = 'Error while processing {} file'
 FILES_NOT_FOUND_ERROR_MESSAGE = 'No file part'
-
+REPLENISH_CATEGORIES = ['Покупка металов',
+                        'Покупка валюты',
+                        'replenish',
+                        'Покупка криптовалюты',
+                        '']
 
 @csv.route('/csv/upload', methods=['GET', 'POST'])
 def upload():
@@ -25,14 +29,11 @@ def upload():
     files = request.files.getlist('files[]')
 
     data = []
-    replenish_categories = ['Покупка металов',
-                            'Покупка валюты',
-                            'replenish',
-                            'Покупка криптовалюты']
+
     for file in files:
         try:
             dataframe = pd.read_csv(file, delimiter=';', usecols=['date', 'amount', 'category'])
-            dataframe['category'] = (dataframe['category'].isin(replenish_categories))
+            dataframe['category'] = (dataframe['category'].isin(REPLENISH_CATEGORIES))
             data.append(json.dumps({file.filename: dataframe.to_json()}))
 
         except (ValueError, KeyError) as error:

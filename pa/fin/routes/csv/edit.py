@@ -7,8 +7,8 @@ from pa.fin.routes.csv import csv
 
 
 @csv.route('/csv/edit')
-def edit(dfs=None):
+def edit():
     """
     Endpoint that responsive to edit csv file
     """
-    return render_template('csv/edit.jinja2', dfs=dfs)
+    return 'Nothing here'

@@ -1,9 +1,61 @@
 {% extends './base/base.jinja2' %}
 {% block body %}
-{% for asset, prices in assets_prices.items() %}
-    <p>{{ asset }}</p>
-    {% for price in prices %}
-        <p>{{ price }}</p>
+    <script type="application/javascript"
+            src="{{ url_for('static', filename='node_modules/chart.js/dist/Chart.bundle.js') }}">
+    </script>
+    {% for asset, prices in assets_prices.items() %}
+        <div class="container-fluid">
+            <div class="row p-2">
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title">
+                                {{ asset }}
+                            </div>
+                            <canvas id="{{ asset }}_prices_chart"></canvas>
+                            <script>
+                                var ctx = document.getElementById('{{ asset }}_prices_chart').getContext('2d');
+
+                                var chart = new Chart(ctx, {
+                                    type: 'line',
+                                    data: {
+                                        datasets: [{
+                                            data: [
+                                                {% for price in prices %} {% raw %} {
+                                                    {% endraw %}
+                                                    x: new Date('{{ price.date }}'),
+                                                    y: {{ price.amount }} {% raw %}
+                                                } {% endraw %},
+                                                {% endfor %}],
+                                            "fill": false,
+                                            "borderColor": "rgb(75, 192, 192)",
+                                            "lineTension": 0.05
+                                        }]
+                                    },
+                                    options: {
+                                        title: {
+                                            display: true,
+                                            text: "PRICE"
+                                        },
+                                        legend: {
+                                            display: false,
+                                        },
+                                        scales: {
+                                            xAxes: [{
+                                                type: 'time',
+                                                time: {
+                                                    unit: 'month'
+                                                },
+                                                distribution: 'linear',
+                                            }]
+                                        }
+                                    }
+                                })
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endfor %}
-{% endfor %}
 {% endblock %}
