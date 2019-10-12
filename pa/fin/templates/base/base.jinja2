@@ -1,10 +1,10 @@
 <html>
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/bootstrap/dist/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 </head>
-<script src="{{ url_for('static', filename= 'jquery.js') }}"></script>
-<script src="{{ url_for('static', filename= 'handlebars.js') }}"></script>
+<script src="{{ url_for('static', filename= 'node_modules/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename= 'node_modules/handlebars/dist/handlebars.min.js') }}"></script>
 <body>
 {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -16,7 +16,7 @@
     {% endif %}
 {% endwith %}
 {% block body %}{% endblock %}
-<script src="{{ url_for('static', filename= 'popper.min.js') }}"></script>
-<script src="{{ url_for('static', filename= 'bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename= 'node_modules/popper.js/dist/umd/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename= 'node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 </body>
 </html>
