@@ -6,3 +6,5 @@ venv
 raw_data
 *.log
 *.pyc
+data
+node_modules

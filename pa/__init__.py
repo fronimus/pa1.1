@@ -5,12 +5,14 @@ Creating Flask app
 import logging
 
 from flask import Flask
+from flask_apscheduler import APScheduler
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
+scheduler = APScheduler()
 
 
 def create_app(config_class=Config):
@@ -20,6 +22,9 @@ def create_app(config_class=Config):
     logging.basicConfig(filename='logs/' + __name__ + '.log', level=logging.ERROR)
     app = Flask(__name__)
     app.config.from_object(config_class)
+
+    scheduler.init_app(app)
+    scheduler.start()
     db.init_app(app)
     migrate.init_app(app, db)
 

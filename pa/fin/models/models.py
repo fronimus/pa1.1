@@ -2,7 +2,7 @@
 """
 Module for PA models
 """
-from sqlalchemy import event
+from sqlalchemy import event, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from pa import db
@@ -36,3 +36,13 @@ class Inflation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False, index=True)
     rate = db.Column(db.Numeric(precision=10, scale=2, asdecimal=True), nullable=False)
+
+
+class ExchangeRates(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date, nullable=False, index=True)
+    currency_from = db.Column(db.Enum(Currency), nullable=False, index=True)
+    currency_to = db.Column(db.Enum(Currency), nullable=False, index=True)
+    exchange_rate = db.Column(db.Numeric(precision=10, scale=2, asdecimal=True), nullable=False)
+
+    __table_args__ = ((UniqueConstraint('date', 'currency_from', 'currency_to')),)
