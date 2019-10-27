@@ -1,8 +1,8 @@
-"""initial migration
+"""initial db migration
 
-Revision ID: 083123b67ef1
+Revision ID: 8d5037cb1644
 Revises: 
-Create Date: 2019-10-05 00:00:35.980806
+Create Date: 2019-10-27 22:34:05.222593
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '083123b67ef1'
+revision = '8d5037cb1644'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -35,9 +35,11 @@ def upgrade():
     op.create_index(op.f('ix_inflation_date'), 'inflation', ['date'], unique=False)
     op.create_table('record',
     sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('asset_id', sa.Integer(), nullable=True),
     sa.Column('date', sa.Date(), nullable=False),
     sa.Column('amount', sa.Numeric(precision=10, scale=2), nullable=False),
     sa.Column('is_replenish', sa.Boolean(), nullable=False),
+    sa.ForeignKeyConstraint(['asset_id'], ['asset.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_record_date'), 'record', ['date'], unique=False)

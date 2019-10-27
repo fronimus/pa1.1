@@ -28,9 +28,7 @@ def create_app(config_class=Config):
 
     config = app.config
     panels = list(config['DEBUG_TB_PANELS'])
-    panels.append('flask_debug_api.BrowseAPIPanel')
     config['DEBUG_TB_PANELS'] = panels
-    config['DEBUG_API_PREFIX'] = '/fin'
 
     from .fin.routes.csv import csv
     from .fin.routes.asset import asset
