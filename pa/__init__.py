@@ -5,14 +5,13 @@ Creating Flask app
 import logging
 
 from flask import Flask
-from flask_apscheduler import APScheduler
+from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from config import Config
+from ..config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
-scheduler = APScheduler()
 
 
 def create_app(config_class=Config):
@@ -23,10 +22,14 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    scheduler.init_app(app)
-    scheduler.start()
     db.init_app(app)
     migrate.init_app(app, db)
+    toolbar = DebugToolbarExtension()
+    toolbar.init_app(app)
+
+    config = app.config
+    panels = list(config['DEBUG_TB_PANELS'])
+    config['DEBUG_TB_PANELS'] = panels
 
     from .fin.routes.csv import csv
     from .fin.routes.asset import asset

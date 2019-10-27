@@ -16,9 +16,9 @@ Handlebars.registerHelper('formatDate', function (dateString) {
 
 function deleteRow(rowId) {
     "use strict";
-    document.getElementById(rowId).remove();
     let toDelete = rowId.split(':');
     globalAccountData[toDelete[0]].splice(toDelete[1], 1);
+    renderPage();
 }
 
 function renderPage() {

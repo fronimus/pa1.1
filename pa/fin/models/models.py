@@ -5,10 +5,10 @@ Module for PA models
 from sqlalchemy import event, UniqueConstraint
 from sqlalchemy.orm import relationship
 
-from pa import db
+from ... import db
 
 # pylint: disable=too-few-public-methods
-from pa.fin.models.enum import Currency
+from ..models.enum import Currency
 
 
 class Record(db.Model):
@@ -23,9 +23,10 @@ class Record(db.Model):
     is_replenish = db.Column(db.Boolean, nullable=False, default=True)
 
 
-# pylint: enable=too-few-public-methods
-
 class Asset(db.Model):
+    """
+    The model that represents an asset
+    """
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(length=25), nullable=False, index=True)
     currency = db.Column(db.Enum(Currency), nullable=False, index=True)
@@ -33,6 +34,9 @@ class Asset(db.Model):
 
 
 class Inflation(db.Model):
+    """
+    The model that represents an inflation
+    """
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False, index=True)
     rate = db.Column(db.Numeric(precision=10, scale=2, asdecimal=True), nullable=False)

@@ -1,20 +1,28 @@
 import json
 from _decimal import Decimal
+from json import JSONDecodeError
 
 import dateutil
-from flask import request, abort, jsonify
+from flask import request, jsonify, current_app
 
-from pa import db
-from pa.fin.models import Asset, Currency, Record
+from .... import db
+from ...models import Asset, Currency, Record
 from ..csv import csv
+
+FILES_NOT_FOUND_ERROR_MESSAGE = 'Files Not Found'
+INVALID_FILES_ERROR_MESSAGE = 'Invalid File Format'
 
 
 @csv.route('csv/save', methods=["POST"])
 def save():
     raw_data = request.form.get('data')
     if raw_data is None:
-        abort(400)
-    json_data = json.loads(raw_data)
+        return jsonify({'error': FILES_NOT_FOUND_ERROR_MESSAGE}), 400
+    try:
+        json_data = json.loads(raw_data)
+    except JSONDecodeError as error:
+        current_app.logger.exception(error)
+        return jsonify({'error': INVALID_FILES_ERROR_MESSAGE}), 400
 
     asset_query = db.session.query(Asset.name)
     existing_assets = [asset.name for asset in asset_query]
