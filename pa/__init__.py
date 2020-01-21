@@ -30,12 +30,16 @@ def create_app(config_class=Config):
     panels = list(config['DEBUG_TB_PANELS'])
     config['DEBUG_TB_PANELS'] = panels
 
-    from .fin.routes.csv import csv
+    from .fin.routes.account import account_blueprint
     from .fin.routes.asset import asset
-    from .site import site
+    from .fin.routes.csv import csv
+    from .fin.routes.dashboard import fin_dashboard_blueprint
+    from .site import site_blueprint
 
+    app.register_blueprint(account_blueprint, url_prefix='/account')
     app.register_blueprint(asset, url_prefix='/fin')
     app.register_blueprint(csv, url_prefix='/fin')
-    app.register_blueprint(site)
+    app.register_blueprint(fin_dashboard_blueprint, url_prefix='/fin')
+    app.register_blueprint(site_blueprint)
     app.jinja_env.filters['zip'] = zip
     return app
