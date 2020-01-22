@@ -23,21 +23,20 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
     db.init_app(app)
     migrate.init_app(app, db)
-    toolbar = DebugToolbarExtension()
-    toolbar.init_app(app)
+    if not config_class.TESTING:
+        toolbar = DebugToolbarExtension()
+        toolbar.init_app(app)
 
-    config = app.config
-    panels = list(config['DEBUG_TB_PANELS'])
-    config['DEBUG_TB_PANELS'] = panels
+        config = app.config
+        panels = list(config['DEBUG_TB_PANELS'])
+        config['DEBUG_TB_PANELS'] = panels
 
     from .fin.routes.account import account_blueprint
-    from .fin.routes.asset import asset
     from .fin.routes.csv import csv
     from .fin.routes.dashboard import fin_dashboard_blueprint
     from .site import site_blueprint
 
-    app.register_blueprint(account_blueprint, url_prefix='/account')
-    app.register_blueprint(asset, url_prefix='/fin')
+    app.register_blueprint(account_blueprint, url_prefix='/fin')
     app.register_blueprint(csv, url_prefix='/fin')
     app.register_blueprint(fin_dashboard_blueprint, url_prefix='/fin')
     app.register_blueprint(site_blueprint)

@@ -7,7 +7,7 @@ import json
 from flask import current_app, url_for
 
 from pa import db
-from pa.fin.models import Asset, Record
+from pa.fin.models import Account, Record
 from pa.fin.routes.csv.save import FILES_NOT_FOUND_ERROR_MESSAGE, INVALID_FILES_ERROR_MESSAGE
 
 from tests.test_fin import client, generate_filename
@@ -73,5 +73,5 @@ def test_csv_save(client):
                                content_type='multipart/form-data',
                                data=valid_files)
         # pylint: disable=no-member
-        assert db.session.query(Asset).count() == 1
+        assert db.session.query(Account).count() == 1
         assert db.session.query(Record).count() == 1

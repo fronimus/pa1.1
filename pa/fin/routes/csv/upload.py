@@ -2,6 +2,7 @@
 Module for csv upload endpoint
 """
 import json
+import pdb
 
 import pandas as pd
 from flask import render_template, request, flash, redirect, current_app
@@ -17,6 +18,7 @@ def upload():
     """
     Endpoint that responsive to uploading csv files
     """
+    # pdb.set_trace()
     if request.method == "GET":
         return render_template('csv/upload.jinja2')
     if 'files[]' not in request.files:

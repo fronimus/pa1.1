@@ -1,11 +1,13 @@
 """
     Set of helpful methods for tests
 """
+import pdb
 import random
 import string
 
 import pytest
 
+from config import TestConfig
 from pa import create_app, db
 
 
@@ -14,25 +16,20 @@ def client():
     """
     Flask client fixture
     """
-    app = create_app()
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app = create_app(TestConfig)
 
     db.init_app(app)
-
     with app.app_context():
         db.create_all()
-
-    app.config['DEBUG'] = True
-    app.config['TESTING'] = True
 
     ctx = app.app_context()
     ctx.push()
     with app.app_context():
         yield app.test_client()
 
+    with app.app_context():
+        db.drop_all()
     ctx.pop()
-
 
 def generate_filename(length=10):
     """

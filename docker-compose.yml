@@ -1,6 +1,7 @@
 version: "3.3"
 services:
   web:
+    container_name: pa11
     build: .
     depends_on:
       - postgres
@@ -9,6 +10,9 @@ services:
       FLASK_ENV: ${FLASK_ENV}
       FLASK_DEBUG: ${FLASK_DEBUG}
       SQLALCHEMY_DATABASE_URI: ${SQLALCHEMY_DATABASE_URI}
+      TEST_SQLALCHEMY_DATABASE_URI: ${TEST_SQLALCHEMY_DATABASE_URI}
+      LC_ALL: ${LC_ALL}
+      LANG: ${LANG}
     ports:
         - "5000:5000"
     restart: always
